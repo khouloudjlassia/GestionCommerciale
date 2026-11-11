@@ -1,1 +1,173 @@
-<p>order-list works!</p>
+
+<div class="page-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div class="brand">
+      <span class="brand-icon">🛒</span>
+      <span>Gestion<br>Commerciale</span>
+    </div>
+
+    <nav>
+      <a href="#" class="nav-link">▦ Dashboard</a>
+      <a href="#" class="nav-link">♟ Clients</a>
+      <a href="#" class="nav-link">▣ Produits</a>
+      <a href="#" class="nav-link active">🛒 Commandes</a>
+    </nav>
+
+    <a href="#" class="logout">↪ Déconnexion</a>
+
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+
+    <!-- Header -->
+    <header class="topbar">
+      <h2>🛒 Gestion des commandes</h2>
+      <span class="user">● Khouloud ⌄</span>
+    </header>
+
+    <section class="content">
+
+      <!-- Title -->
+      <div class="heading-row">
+        <div>
+          <h1>Gestion des commandes</h1>
+          <p>Consultez et gérez les commandes clients</p>
+        </div>
+
+        <button class="primary">
+          + Nouvelle commande
+        </button>
+      </div>
+
+      <!-- Search and Filter -->
+      <div class="toolbar">
+
+        <input
+          type="search"
+          placeholder="Rechercher une commande..."
+        >
+
+        <button class="search-btn">⌕</button>
+
+        <select class="filter">
+          <option value="">Tous les statuts</option>
+          <option value="Validée">Validée</option>
+          <option value="Brouillon">Brouillon</option>
+          <option value="Annulée">Annulée</option>
+        </select>
+
+      </div>
+
+      <!-- Orders Table -->
+      <div class="table-card">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>N° Commande</th>
+              <th>Client</th>
+              <th>Date de commande</th>
+              <th>Statut</th>
+              <th>Total HT</th>
+              <th>Total TTC</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <!-- Order 1 -->
+            <tr>
+              <td>1</td>
+              <td>CMD-1005</td>
+              <td>Ben Ali Sana</td>
+              <td>10/06/2025</td>
+
+              <td>
+                <span class="status valid">
+                  Validée
+                </span>
+              </td>
+
+              <td>800.00 TND</td>
+              <td>952.00 TND</td>
+
+              <td class="actions">
+                <button class="view" title="Détails">◉</button>
+                <button class="edit" title="Modifier">✎</button>
+                <button class="delete" title="Supprimer">▣</button>
+              </td>
+            </tr>
+
+            <!-- Order 2 -->
+            <tr>
+              <td>2</td>
+              <td>CMD-1004</td>
+              <td>Trabelsi Ahmed</td>
+              <td>08/06/2025</td>
+
+              <td>
+                <span class="status draft">
+                  Brouillon
+                </span>
+              </td>
+
+              <td>300.00 TND</td>
+              <td>357.00 TND</td>
+
+              <td class="actions">
+                <button class="view" title="Détails">◉</button>
+                <button class="edit" title="Modifier">✎</button>
+                <button class="delete" title="Supprimer">▣</button>
+              </td>
+            </tr>
+
+            <!-- Order 3 -->
+            <tr>
+              <td>3</td>
+              <td>CMD-1003</td>
+              <td>Laabidi Wafa</td>
+              <td>05/06/2025</td>
+
+              <td>
+                <span class="status cancelled">
+                  Annulée
+                </span>
+              </td>
+
+              <td>450.00 TND</td>
+              <td>535.50 TND</td>
+
+              <td class="actions">
+                <button class="view" title="Détails">◉</button>
+                <button class="edit" title="Modifier">✎</button>
+                <button class="delete" title="Supprimer">▣</button>
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button>‹</button>
+          <button class="current">1</button>
+          <button>2</button>
+          <button>3</button>
+          <button>›</button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>

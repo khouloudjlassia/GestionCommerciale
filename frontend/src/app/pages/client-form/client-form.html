@@ -1,1 +1,102 @@
-<p>client-form works!</p>
+
+<!-- Background overlay -->
+<div class="modal-overlay">
+
+  <!-- Client Form Modal -->
+  <div class="client-modal">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="title">
+        <span class="plus-icon">+</span>
+        <h2>Ajouter un client</h2>
+      </div>
+
+      <button type="button" class="close-btn">×</button>
+    </div>
+
+    <!-- Form -->
+    <form class="client-form">
+
+      <div class="form-grid">
+
+        <!-- Nom -->
+        <div class="form-group">
+          <label for="lastName">Nom <span>*</span></label>
+          <input
+            type="text"
+            id="lastName"
+            placeholder="Ben Ali"
+            required
+          >
+        </div>
+
+        <!-- Prénom -->
+        <div class="form-group">
+          <label for="firstName">Prénom <span>*</span></label>
+          <input
+            type="text"
+            id="firstName"
+            placeholder="Sana"
+            required
+          >
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email <span>*</span></label>
+          <input
+            type="email"
+            id="email"
+            placeholder="sana.benali@email.com"
+            required
+          >
+        </div>
+
+        <!-- Téléphone -->
+        <div class="form-group">
+          <label for="phone">Téléphone <span>*</span></label>
+          <input
+            type="tel"
+            id="phone"
+            placeholder="98 765 432"
+            required
+          >
+        </div>
+
+        <!-- Adresse -->
+        <div class="form-group">
+          <label for="address">Adresse</label>
+          <input
+            type="text"
+            id="address"
+            placeholder="Tunis"
+          >
+        </div>
+
+        <!-- Date -->
+        <div class="form-group">
+          <label for="createdAt">Date de création</label>
+          <input
+            type="date"
+            id="createdAt"
+          >
+        </div>
+
+      </div>
+
+      <!-- Footer buttons -->
+      <div class="form-actions">
+        <button type="button" class="btn-cancel">
+          Annuler
+        </button>
+
+        <button type="submit" class="btn-save">
+          Enregistrer
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>

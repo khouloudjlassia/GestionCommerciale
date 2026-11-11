@@ -1,1 +1,18 @@
-<router-outlet />
+<header class="navbar">
+  <span class="brand">Gestion Commerciale</span>
+  <nav>
+    <a routerLink="/clients" routerLinkActive="active">Clients</a>
+    <a routerLink="/products" routerLinkActive="active">Produits</a>
+    <a routerLink="/orders" routerLinkActive="active">Commandes</a>
+  </nav>
+</header>
+
+<main class="container">
+  @if (notifier.notice(); as n) {
+    <div class="alert" [class.alert-success]="n.type === 'success'" [class.alert-error]="n.type === 'error'">
+      {{ n.text }}
+    </div>
+  }
+
+  <router-outlet />
+</main>

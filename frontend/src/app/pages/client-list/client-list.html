@@ -1,1 +1,127 @@
-<p>client-list works!</p>
+
+<div class="page-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-icon">🛒</span>
+      <span>Gestion<br>Commerciale</span>
+    </div>
+
+    <nav>
+      <a href="#" class="nav-link">▦ Dashboard</a>
+      <a href="#" class="nav-link active">♟ Clients</a>
+      <a href="#" class="nav-link">▣ Produits</a>
+      <a href="#" class="nav-link">🛒 Commandes</a>
+    </nav>
+
+    <a href="#" class="logout">↪ Déconnexion</a>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <header class="topbar">
+      <span>Gestion commerciale</span>
+      <span class="user">● Khouloud ⌄</span>
+    </header>
+
+    <section class="content">
+
+      <!-- Page Header -->
+      <div class="heading-row">
+        <div>
+          <h1>Gestion des clients</h1>
+          <p>Consultez et gérez vos clients</p>
+        </div>
+
+        <button class="primary">
+          + Nouveau client
+        </button>
+      </div>
+
+      <!-- Search -->
+      <div class="toolbar">
+        <input
+          type="search"
+          placeholder="Rechercher un client..."
+        >
+      </div>
+
+      <!-- Clients Table -->
+      <div class="table-card">
+
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Email</th>
+              <th>Téléphone</th>
+              <th>Adresse</th>
+              <th>Date de création</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Ben Ali</td>
+              <td>Sana</td>
+              <td>sana.benali@email.com</td>
+              <td>98 765 432</td>
+              <td>Tunis</td>
+              <td>12/01/2025</td>
+              <td class="actions">
+                <button class="view">◉</button>
+                <button class="edit">✎</button>
+                <button class="delete">▣</button>
+              </td>
+            </tr>
+
+            <tr>
+              <td>2</td>
+              <td>Trabelsi</td>
+              <td>Ahmed</td>
+              <td>ahmed.trabelsi@email.com</td>
+              <td>97 654 321</td>
+              <td>La Marsa</td>
+              <td>20/02/2025</td>
+              <td class="actions">
+                <button class="view">◉</button>
+                <button class="edit">✎</button>
+                <button class="delete">▣</button>
+              </td>
+            </tr>
+
+            <tr>
+              <td>3</td>
+              <td>Laabidi</td>
+              <td>Wafa</td>
+              <td>wafa.laabidi@email.com</td>
+              <td>96 543 210</td>
+              <td>Carthage</td>
+              <td>15/03/2025</td>
+              <td class="actions">
+                <button class="view">◉</button>
+                <button class="edit">✎</button>
+                <button class="delete">▣</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button>‹</button>
+          <button class="current">1</button>
+          <button>2</button>
+          <button>›</button>
+        </div>
+
+      </div>
+    </section>
+  </main>
+</div>

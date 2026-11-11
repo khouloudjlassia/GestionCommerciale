@@ -1,1 +1,142 @@
-<p>product-list works!</p>
+
+<div class="page-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div class="brand">
+      <span class="brand-icon">🛒</span>
+      <span>Gestion<br>Commerciale</span>
+    </div>
+
+    <nav>
+      <a href="#" class="nav-link">▦ Dashboard</a>
+      <a href="#" class="nav-link">♟ Clients</a>
+      <a href="#" class="nav-link active">▣ Produits</a>
+      <a href="#" class="nav-link">🛒 Commandes</a>
+    </nav>
+
+    <a href="#" class="logout">↪ Déconnexion</a>
+
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+
+    <!-- Header -->
+    <header class="topbar">
+      <h2>▣ Gestion des produits</h2>
+      <span class="user">● Khouloud ⌄</span>
+    </header>
+
+    <section class="content">
+
+      <!-- Title -->
+      <div class="heading-row">
+        <div>
+          <h1>Gestion des produits</h1>
+          <p>Consultez et gérez votre catalogue de produits</p>
+        </div>
+
+        <button class="primary">
+          + Nouveau produit
+        </button>
+      </div>
+
+      <!-- Search -->
+      <div class="toolbar">
+        <input
+          type="search"
+          placeholder="Rechercher un produit..."
+        >
+        <button class="search-btn">⌕</button>
+      </div>
+
+      <!-- Products Table -->
+      <div class="table-card">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Référence</th>
+              <th>Nom du produit</th>
+              <th>Description</th>
+              <th>Prix HT</th>
+              <th>Stock</th>
+              <th>Date de création</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td>1</td>
+              <td>PRD001</td>
+              <td>Laptop HP</td>
+              <td>Ordinateur portable</td>
+              <td>1200.00 TND</td>
+              <td>15</td>
+              <td>10/01/2025</td>
+
+              <td class="actions">
+                <button class="view" title="Voir">◉</button>
+                <button class="edit" title="Modifier">✎</button>
+                <button class="delete" title="Supprimer">▣</button>
+              </td>
+            </tr>
+
+            <tr>
+              <td>2</td>
+              <td>PRD002</td>
+              <td>Souris Sans Fil</td>
+              <td>Souris ergonomique</td>
+              <td>45.00 TND</td>
+              <td>50</td>
+              <td>15/01/2025</td>
+
+              <td class="actions">
+                <button class="view" title="Voir">◉</button>
+                <button class="edit" title="Modifier">✎</button>
+                <button class="delete" title="Supprimer">▣</button>
+              </td>
+            </tr>
+
+            <tr>
+              <td>3</td>
+              <td>PRD003</td>
+              <td>Clavier mécanique</td>
+              <td>Clavier gamer</td>
+              <td>89.00 TND</td>
+              <td>30</td>
+              <td>20/01/2025</td>
+
+              <td class="actions">
+                <button class="view" title="Voir">◉</button>
+                <button class="edit" title="Modifier">✎</button>
+                <button class="delete" title="Supprimer">▣</button>
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button>‹</button>
+          <button class="current">1</button>
+          <button>2</button>
+          <button>3</button>
+          <button>›</button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>

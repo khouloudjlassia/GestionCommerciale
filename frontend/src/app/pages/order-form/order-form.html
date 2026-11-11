@@ -1,1 +1,215 @@
-<p>order-form works!</p>
+
+<div class="page-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div class="brand">
+      <span class="brand-icon">🛒</span>
+      <span>Gestion<br>Commerciale</span>
+    </div>
+
+    <nav>
+      <a href="#" class="nav-link">⌂ Dashboard</a>
+      <a href="#" class="nav-link">♟ Clients</a>
+      <a href="#" class="nav-link">◇ Produits</a>
+      <a href="#" class="nav-link active">🛒 Commandes</a>
+    </nav>
+
+    <a href="#" class="logout">↪ Déconnexion</a>
+
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <h2>🛒 Créer une commande</h2>
+      <div class="user">● Khouloud ⌄</div>
+    </header>
+
+    <section class="content">
+
+      <form class="order-form">
+
+        <div class="order-layout">
+
+          <!-- Left section -->
+          <div class="order-main">
+
+            <!-- Order information -->
+            <div class="form-card">
+
+              <div class="section-title">
+                <span class="section-icon">♟</span>
+                <h3>Informations de la commande</h3>
+              </div>
+
+              <div class="info-grid">
+
+                <div class="form-group">
+                  <label for="client">
+                    Client <span>*</span>
+                  </label>
+
+                  <select id="client" required>
+                    <option value="">Sélectionner un client...</option>
+                    <option value="1">Ben Ali Sana</option>
+                    <option value="2">Trabelsi Ahmed</option>
+                    <option value="3">Laabidi Wafa</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="orderDate">
+                    Date de commande
+                  </label>
+
+                  <input
+                    type="date"
+                    id="orderDate"
+                  >
+                </div>
+
+                <div class="form-group">
+                  <label for="status">Statut</label>
+
+                  <select id="status">
+                    <option value="Validee">Validée</option>
+                    <option value="Brouillon">Brouillon</option>
+                    <option value="Annulee">Annulée</option>
+                  </select>
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Products -->
+            <div class="form-card products-card">
+
+              <div class="section-title">
+                <span class="section-icon">◇</span>
+                <h3>Produits commandés</h3>
+              </div>
+
+              <div class="table-container">
+
+                <table>
+
+                  <thead>
+                    <tr>
+                      <th>Produit</th>
+                      <th>Prix unitaire</th>
+                      <th>Quantité <span>*</span></th>
+                      <th>Total ligne</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+
+                    <tr>
+                      <td>
+                        <select class="product-select">
+                          <option>Laptop HP</option>
+                          <option>Souris Sans Fil</option>
+                          <option>Clavier mécanique</option>
+                        </select>
+                      </td>
+
+                      <td>
+                        <input
+                          type="text"
+                          value="1200.00 TND"
+                          readonly
+                          class="price-input"
+                        >
+                      </td>
+
+                      <td>
+                        <input
+                          type="number"
+                          value="1"
+                          min="1"
+                          class="quantity-input"
+                        >
+                      </td>
+
+                      <td class="line-total">
+                        1200.00 TND
+                      </td>
+
+                      <td>
+                        <button
+                          type="button"
+                          class="btn-delete"
+                          title="Supprimer"
+                        >
+                          ▣
+                        </button>
+                      </td>
+                    </tr>
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+              <button type="button" class="btn-add">
+                + Ajouter un produit
+              </button>
+
+            </div>
+
+          </div>
+
+          <!-- Right section: Totals -->
+          <div class="total-card">
+
+            <div class="section-title">
+              <span class="section-icon">▦</span>
+              <h3>Total de la commande</h3>
+            </div>
+
+            <div class="total-row">
+              <span>Total HT :</span>
+              <strong>1200.00 TND</strong>
+            </div>
+
+            <div class="total-row">
+              <span>TVA (19%) :</span>
+              <strong>228.00 TND</strong>
+            </div>
+
+            <div class="total-row grand-total">
+              <span>Total TTC :</span>
+              <strong>1428.00 TND</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Footer buttons -->
+        <div class="form-actions">
+
+          <button type="button" class="btn-cancel">
+            ↻ Annuler
+          </button>
+
+          <button type="submit" class="btn-save">
+            ✓ Enregistrer la commande
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  </main>
+
+</div>
