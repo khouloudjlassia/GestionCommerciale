@@ -1,18 +1,33 @@
-<header class="navbar">
-  <span class="brand">Gestion Commerciale</span>
-  <nav>
-    <a routerLink="/clients" routerLinkActive="active">Clients</a>
-    <a routerLink="/products" routerLinkActive="active">Produits</a>
-    <a routerLink="/orders" routerLinkActive="active">Commandes</a>
-  </nav>
-</header>
+<div class="page-shell">
 
-<main class="container">
-  @if (notifier.notice(); as n) {
-    <div class="alert" [class.alert-success]="n.type === 'success'" [class.alert-error]="n.type === 'error'">
-      {{ n.text }}
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-icon">🛒</span>
+      <span>Gestion<br>Commerciale</span>
     </div>
-  }
 
-  <router-outlet />
-</main>
+    <nav>
+      <a routerLink="/clients" routerLinkActive="active" class="nav-link">♟ Clients</a>
+      <a routerLink="/products" routerLinkActive="active" class="nav-link">▣ Produits</a>
+      <a routerLink="/orders" routerLinkActive="active" class="nav-link">🛒 Commandes</a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <span>Gestion commerciale</span>
+      <span class="user">● Khouloud ⌄</span>
+    </header>
+
+    <section class="content">
+      @if (notifier.notice(); as n) {
+        <div class="alert" [class.alert-success]="n.type === 'success'" [class.alert-error]="n.type === 'error'">
+          {{ n.text }}
+        </div>
+      }
+
+      <router-outlet />
+    </section>
+  </main>
+
+</div>

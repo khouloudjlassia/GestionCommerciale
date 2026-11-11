@@ -1,102 +1,75 @@
+<!-- Un clic sur le fond sombre ferme la fenêtre -->
+<div class="modal-overlay" (click)="close()">
 
-<!-- Background overlay -->
-<div class="modal-overlay">
+  <!-- stopPropagation : un clic dans la fenêtre ne la ferme pas -->
+  <div class="client-modal" (click)="$event.stopPropagation()">
 
-  <!-- Client Form Modal -->
-  <div class="client-modal">
-
-    <!-- Header -->
     <div class="modal-header">
       <div class="title">
-        <span class="plus-icon">+</span>
-        <h2>Ajouter un client</h2>
+        <span class="plus-icon">{{ clientId() ? '✎' : '+' }}</span>
+        <h2>{{ clientId() ? 'Modifier le client' : 'Ajouter un client' }}</h2>
       </div>
-
-      <button type="button" class="close-btn">×</button>
+      <button type="button" class="close-btn" aria-label="Fermer" (click)="close()">×</button>
     </div>
 
-    <!-- Form -->
-    <form class="client-form">
+    <form class="client-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
 
       <div class="form-grid">
 
-        <!-- Nom -->
         <div class="form-group">
           <label for="lastName">Nom <span>*</span></label>
-          <input
-            type="text"
-            id="lastName"
-            placeholder="Ben Ali"
-            required
-          >
+          <input type="text" id="lastName" formControlName="lastName" placeholder="Ben Ali" />
+          @if (form.controls.lastName.touched && form.controls.lastName.errors) {
+            <small class="error-text">Le nom est obligatoire (100 caractères maximum).</small>
+          }
         </div>
 
-        <!-- Prénom -->
         <div class="form-group">
-          <label for="firstName">Prénom <span>*</span></label>
-          <input
-            type="text"
-            id="firstName"
-            placeholder="Sana"
-            required
-          >
+          <label for="firstName">Prénom / Raison sociale <span>*</span></label>
+          <input type="text" id="firstName" formControlName="firstName" placeholder="Sana" />
+          @if (form.controls.firstName.touched && form.controls.firstName.errors) {
+            <small class="error-text">Ce champ est obligatoire (100 caractères maximum).</small>
+          }
         </div>
 
-        <!-- Email -->
         <div class="form-group">
           <label for="email">Email <span>*</span></label>
-          <input
-            type="email"
-            id="email"
-            placeholder="sana.benali@email.com"
-            required
-          >
+          <input type="email" id="email" formControlName="email" placeholder="sana.benali@email.com" />
+          @if (form.controls.email.touched && form.controls.email.errors) {
+            <small class="error-text">Email obligatoire et valide.</small>
+          }
         </div>
 
-        <!-- Téléphone -->
         <div class="form-group">
           <label for="phone">Téléphone <span>*</span></label>
-          <input
-            type="tel"
-            id="phone"
-            placeholder="98 765 432"
-            required
-          >
+          <input type="tel" id="phone" formControlName="phone" placeholder="98 765 432" />
+          @if (form.controls.phone.touched && form.controls.phone.errors) {
+            <small class="error-text">Téléphone obligatoire (8 à 15 chiffres).</small>
+          }
         </div>
 
-        <!-- Adresse -->
         <div class="form-group">
           <label for="address">Adresse</label>
-          <input
-            type="text"
-            id="address"
-            placeholder="Tunis"
-          >
+          <input type="text" id="address" formControlName="address" placeholder="Tunis" />
+          @if (form.controls.address.touched && form.controls.address.errors) {
+            <small class="error-text">Adresse trop longue (250 caractères maximum).</small>
+          }
         </div>
 
-        <!-- Date -->
         <div class="form-group">
           <label for="createdAt">Date de création</label>
-          <input
-            type="date"
-            id="createdAt"
-          >
+          <input type="date" id="createdAt" [value]="createdAt()" disabled />
         </div>
 
       </div>
 
-      <!-- Footer buttons -->
       <div class="form-actions">
-        <button type="button" class="btn-cancel">
-          Annuler
-        </button>
-
-        <button type="submit" class="btn-save">
-          Enregistrer
+        <button type="button" class="btn-cancel" (click)="close()">Annuler</button>
+        <button type="submit" class="btn-save" [disabled]="saving()">
+          {{ saving() ? 'Enregistrement...' : 'Enregistrer' }}
         </button>
       </div>
 
     </form>
-
   </div>
 </div>
