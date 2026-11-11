@@ -1,107 +1,69 @@
+<div class="dialog-overlay" (click)="close()">
+  <div class="dialog-box dialog-wide" (click)="$event.stopPropagation()">
 
-<div class="page-container">
-
-  <div class="detail-card">
-
-    <!-- Header -->
-    <div class="header">
-
-      <button class="back-btn">
-        ← Retour
-      </button>
-
-      <div class="title">
-        <span class="cart-icon">🛒</span>
+    <div class="dialog-header">
+      <div class="dialog-title">
+        <span class="dialog-icon">🛒</span>
         <h2>Détail de la commande</h2>
       </div>
-
+      <button type="button" class="dialog-close" aria-label="Fermer" (click)="close()">×</button>
     </div>
 
-    <!-- Main content -->
-    <div class="detail-content">
+    <div class="dialog-body">
+      @if (order(); as o) {
+        <div class="detail-layout">
 
-      <!-- Order information -->
-      <div class="order-info">
+          <dl class="detail-info">
+            <dt>N° Commande :</dt>      <dd>{{ o.orderNumber }}</dd>
+            <dt>Client :</dt>           <dd>{{ o.clientName }}</dd>
+            <dt>Date de commande :</dt> <dd>{{ o.orderDate | date:'dd/MM/yyyy' }}</dd>
+            <dt>Statut :</dt>
+            <dd><span [class]="'badge ' + statusInfo(o.status).css">{{ statusInfo(o.status).label }}</span></dd>
+          </dl>
 
-        <div class="info-row">
-          <span>N° Commande :</span>
-          <strong>CMD-1005</strong>
-        </div>
-
-        <div class="info-row">
-          <span>Client :</span>
-          <strong>Ben Ali Sana</strong>
-        </div>
-
-        <div class="info-row">
-          <span>Date de commande :</span>
-          <strong>10/06/2025</strong>
-        </div>
-
-        <div class="info-row">
-          <span>Statut :</span>
-          <span class="status valid">Validée</span>
-        </div>
-
-      </div>
-
-      <!-- Ordered products -->
-      <div class="products-section">
-
-        <h3>Produits commandés</h3>
-
-        <div class="table-container">
-
-          <table>
-
-            <thead>
-              <tr>
-                <th>Produit</th>
-                <th>Quantité</th>
-                <th>Prix unitaire</th>
-                <th>Total ligne</th>
-              </tr>
-            </thead>
-
-            <tbody>
-
-              <tr>
-                <td>Laptop HP</td>
-                <td>1</td>
-                <td>800.00 TND</td>
-                <td>800.00 TND</td>
-              </tr>
-
-            </tbody>
-
-          </table>
+          <div class="panel">
+            <h4>Produits commandés</h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Produit</th>
+                  <th>Quantité</th>
+                  <th>Prix unitaire</th>
+                  <th>Total ligne</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (l of o.lines; track $index) {
+                  <tr>
+                    <td>{{ l.productName }}</td>
+                    <td>{{ l.quantity }}</td>
+                    <td>{{ l.unitPrice | number:'1.2-2' }} TND</td>
+                    <td>{{ l.lineTotal | number:'1.2-2' }} TND</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
 
         </div>
 
-      </div>
+        <p class="detail-totals">
+          Total HT : <strong>{{ o.totalHT | number:'1.2-2' }} TND</strong>
+          <span class="sep">|</span>
+          Total TTC : <strong>{{ o.totalTTC | number:'1.2-2' }} TND</strong>
+        </p>
 
-    </div>
-
-    <!-- Order totals -->
-    <div class="totals">
-
-      <div class="total-row">
-        <span>Total HT :</span>
-        <strong>800.00 TND</strong>
-      </div>
-
-      <div class="total-row">
-        <span>TVA (19%) :</span>
-        <strong>152.00 TND</strong>
-      </div>
-
-      <div class="total-row grand-total">
-        <span>Total TTC :</span>
-        <strong>952.00 TND</strong>
-      </div>
-
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="close()">← Retour</button>
+          @if (isDraft(o.status)) {
+            <button type="button" class="btn-cancel" (click)="edit(o)">✎ Modifier</button>
+            <button type="button" class="btn-save" (click)="validate(o)">Valider la commande</button>
+          }
+        </div>
+      } @else {
+        <p class="empty">Chargement...</p>
+      }
     </div>
 
   </div>
-
 </div>

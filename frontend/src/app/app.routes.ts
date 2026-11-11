@@ -26,8 +26,13 @@ export const routes: Routes = [
     ],
   },
 
-  { path: 'orders', component: OrderList },
-  { path: 'orders/new', component: OrderForm },
-  { path: 'orders/:id/edit', component: OrderForm },
-  { path: 'orders/:id', component: OrderDetail },
+ {
+  path: 'orders',
+  component: OrderList,
+  children: [
+    { path: 'new', component: OrderForm },
+    { path: ':id/edit', component: OrderForm },
+    { path: ':id', component: OrderDetail },   // toujours après 'new' et ':id/edit'
+  ],
+},
 ];

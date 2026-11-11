@@ -63,7 +63,7 @@ export interface OrderModel {
   clientId: number;
   clientName: string;
   orderDate: string;
-  status: OrderStatus;
+   status: number;
   totalHT: number;
   totalTTC: number;
   lines: OrderLineModel[];

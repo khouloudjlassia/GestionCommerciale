@@ -1,215 +1,115 @@
+<div class="dialog-overlay" (click)="close()">
+  <div class="dialog-box dialog-wide" (click)="$event.stopPropagation()">
 
-<div class="page-shell">
-
-  <!-- Sidebar -->
-  <aside class="sidebar">
-
-    <div class="brand">
-      <span class="brand-icon">🛒</span>
-      <span>Gestion<br>Commerciale</span>
+    <div class="dialog-header">
+      <div class="dialog-title">
+        <span class="dialog-icon">🛒</span>
+        <h2>{{ orderId() ? 'Modifier la commande' : 'Nouvelle commande' }}</h2>
+      </div>
+      <button type="button" class="dialog-close" aria-label="Fermer" (click)="close()">×</button>
     </div>
 
-    <nav>
-      <a href="#" class="nav-link">⌂ Dashboard</a>
-      <a href="#" class="nav-link">♟ Clients</a>
-      <a href="#" class="nav-link">◇ Produits</a>
-      <a href="#" class="nav-link active">🛒 Commandes</a>
-    </nav>
+    <div class="dialog-body">
 
-    <a href="#" class="logout">↪ Déconnexion</a>
+      <div class="stepper">
+        <div class="step" [class.active]="step() === 1" [class.done]="step() > 1">
+          <span class="step-num">1</span> Client
+        </div>
+        <div class="step" [class.active]="step() === 2" [class.done]="step() > 2">
+          <span class="step-num">2</span> Produits
+        </div>
+        <div class="step" [class.active]="step() === 3">
+          <span class="step-num">3</span> Récapitulatif
+        </div>
+      </div>
 
-  </aside>
+      <div class="order-layout">
 
-  <!-- Main content -->
-  <main class="main-content">
-
-    <!-- Topbar -->
-    <header class="topbar">
-      <h2>🛒 Créer une commande</h2>
-      <div class="user">● Khouloud ⌄</div>
-    </header>
-
-    <section class="content">
-
-      <form class="order-form">
-
-        <div class="order-layout">
-
-          <!-- Left section -->
-          <div class="order-main">
-
-            <!-- Order information -->
-            <div class="form-card">
-
-              <div class="section-title">
-                <span class="section-icon">♟</span>
-                <h3>Informations de la commande</h3>
-              </div>
-
-              <div class="info-grid">
-
-                <div class="form-group">
-                  <label for="client">
-                    Client <span>*</span>
-                  </label>
-
-                  <select id="client" required>
-                    <option value="">Sélectionner un client...</option>
-                    <option value="1">Ben Ali Sana</option>
-                    <option value="2">Trabelsi Ahmed</option>
-                    <option value="3">Laabidi Wafa</option>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label for="orderDate">
-                    Date de commande
-                  </label>
-
-                  <input
-                    type="date"
-                    id="orderDate"
-                  >
-                </div>
-
-                <div class="form-group">
-                  <label for="status">Statut</label>
-
-                  <select id="status">
-                    <option value="Validee">Validée</option>
-                    <option value="Brouillon">Brouillon</option>
-                    <option value="Annulee">Annulée</option>
-                  </select>
-                </div>
-
-              </div>
-
-            </div>
-
-            <!-- Products -->
-            <div class="form-card products-card">
-
-              <div class="section-title">
-                <span class="section-icon">◇</span>
-                <h3>Produits commandés</h3>
-              </div>
-
-              <div class="table-container">
-
-                <table>
-
-                  <thead>
-                    <tr>
-                      <th>Produit</th>
-                      <th>Prix unitaire</th>
-                      <th>Quantité <span>*</span></th>
-                      <th>Total ligne</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-
-                    <tr>
-                      <td>
-                        <select class="product-select">
-                          <option>Laptop HP</option>
-                          <option>Souris Sans Fil</option>
-                          <option>Clavier mécanique</option>
-                        </select>
-                      </td>
-
-                      <td>
-                        <input
-                          type="text"
-                          value="1200.00 TND"
-                          readonly
-                          class="price-input"
-                        >
-                      </td>
-
-                      <td>
-                        <input
-                          type="number"
-                          value="1"
-                          min="1"
-                          class="quantity-input"
-                        >
-                      </td>
-
-                      <td class="line-total">
-                        1200.00 TND
-                      </td>
-
-                      <td>
-                        <button
-                          type="button"
-                          class="btn-delete"
-                          title="Supprimer"
-                        >
-                          ▣
-                        </button>
-                      </td>
-                    </tr>
-
-                  </tbody>
-
-                </table>
-
-              </div>
-
-              <button type="button" class="btn-add">
-                + Ajouter un produit
-              </button>
-
-            </div>
-
+        <div class="panel">
+          <div class="form-group">
+            <label for="client">Client <span>*</span></label>
+            <select id="client" (change)="setClient($any($event.target).value)">
+              <option value="">Sélectionner...</option>
+              @for (c of clients(); track c.id) {
+                <option [value]="c.id" [selected]="c.id === clientId()">{{ c.lastName }} {{ c.firstName }}</option>
+              }
+            </select>
+            @if (submitted() && clientId() === null) {
+              <small class="error-text">Le client est obligatoire.</small>
+            }
           </div>
-
-          <!-- Right section: Totals -->
-          <div class="total-card">
-
-            <div class="section-title">
-              <span class="section-icon">▦</span>
-              <h3>Total de la commande</h3>
-            </div>
-
-            <div class="total-row">
-              <span>Total HT :</span>
-              <strong>1200.00 TND</strong>
-            </div>
-
-            <div class="total-row">
-              <span>TVA (19%) :</span>
-              <strong>228.00 TND</strong>
-            </div>
-
-            <div class="total-row grand-total">
-              <span>Total TTC :</span>
-              <strong>1428.00 TND</strong>
-            </div>
-
-          </div>
-
         </div>
 
-        <!-- Footer buttons -->
-        <div class="form-actions">
+        <div class="panel">
+          <h4>Produits</h4>
+          <table class="line-table">
+            <thead>
+              <tr>
+                <th>Produit</th>
+                <th>Prix unitaire</th>
+                <th>Quantité</th>
+                <th>Total ligne</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (l of lines(); track $index; let i = $index) {
+                <tr>
+                  <td>
+                    <select (change)="setProduct(i, $any($event.target).value)">
+                      <option value="">Choisir...</option>
+                      @for (p of products(); track p.id) {
+                        <option [value]="p.id" [selected]="p.id === l.productId">{{ p.name }}</option>
+                      }
+                    </select>
+                  </td>
+                  <td>{{ unitPrice(l) | number:'1.2-2' }} TND</td>
+                  <td>
+                    <input type="number" min="1" step="1"
+                           [value]="l.quantity"
+                           (input)="setQuantity(i, $any($event.target).value)" />
+                    @if (submitted() && lineError(l); as message) {
+                      <small class="error-text">{{ message }}</small>
+                    }
+                  </td>
+                  <td>{{ lineTotal(l) | number:'1.2-2' }} TND</td>
+                  <td>
+                    <button type="button" class="icon-btn delete" title="Retirer" (click)="removeLine(i)">▣</button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr><td colspan="5" class="empty">Aucun produit ajouté.</td></tr>
+              }
+            </tbody>
+          </table>
 
-          <button type="button" class="btn-cancel">
-            ↻ Annuler
-          </button>
-
-          <button type="submit" class="btn-save">
-            ✓ Enregistrer la commande
-          </button>
-
+          <button type="button" class="btn" (click)="addLine()">+ Ajouter un produit</button>
         </div>
 
-      </form>
+        <div class="panel totals">
+          <div class="totals-row"><span>Total HT :</span><strong>{{ totalHT() | number:'1.2-2' }} TND</strong></div>
+          <div class="totals-row"><span>TVA (19%) :</span><strong>{{ vat() | number:'1.2-2' }} TND</strong></div>
+          <div class="totals-row totals-ttc"><span>Total TTC :</span><strong>{{ totalTTC() | number:'1.2-2' }} TND</strong></div>
+        </div>
 
-    </section>
+      </div>
 
-  </main>
+      @if (submitted() && problems().length > 0) {
+        <ul class="problems">
+          @for (p of problems(); track p) { <li class="error-text">{{ p }}</li> }
+        </ul>
+      }
 
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="close()">Annuler</button>
+        <button type="button" class="btn-cancel" [disabled]="saving()" (click)="save(false)">
+          Enregistrer en brouillon
+        </button>
+        <button type="button" class="btn-save" [disabled]="saving()" (click)="save(true)">
+          {{ saving() ? 'Enregistrement...' : 'Valider la commande' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
 </div>
