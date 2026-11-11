@@ -1,145 +1,78 @@
+<div class="dialog-overlay" (click)="close()">
+  <div class="dialog-box" (click)="$event.stopPropagation()">
 
-<div class="page-shell">
-
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="brand">
-      <span class="brand-icon">🛒</span>
-      <span>Gestion<br>Commerciale</span>
+    <div class="dialog-header">
+      <div class="dialog-title">
+        <span class="dialog-icon">{{ productId() ? '✎' : '+' }}</span>
+        <h2>{{ productId() ? 'Modifier le produit' : 'Ajouter un produit' }}</h2>
+      </div>
+      <button type="button" class="dialog-close" aria-label="Fermer" (click)="close()">×</button>
     </div>
 
-    <nav>
-      <a href="#" class="nav-link">⌂ Dashboard</a>
-      <a href="#" class="nav-link">♟ Clients</a>
-      <a href="#" class="nav-link active">◇ Produits</a>
-      <a href="#" class="nav-link">🛒 Commandes</a>
-    </nav>
+    <form class="dialog-body" [formGroup]="form" (ngSubmit)="submit()" novalidate>
 
-    <a href="#" class="logout">↪ Déconnexion</a>
-  </aside>
+      <div class="form-grid">
 
-  <!-- Main content -->
-  <main class="main-content">
-
-    <!-- Topbar -->
-    <header class="topbar">
-      <h2>◇ Ajouter un produit</h2>
-      <div class="user">● Khouloud ⌄</div>
-    </header>
-
-    <!-- Content -->
-    <section class="content">
-
-      <div class="form-card">
-
-        <div class="section-title">
-          <span class="section-icon">◇</span>
-          <h3>Informations du produit</h3>
+        <div class="form-group">
+          <label for="reference">Référence <span>*</span></label>
+          <input type="text" id="reference" formControlName="reference" placeholder="Ex: PRD001" />
+          @if (form.controls.reference.touched && form.controls.reference.errors) {
+            <small class="error-text">La référence est obligatoire (50 caractères maximum).</small>
+          }
         </div>
 
-        <form>
-
-          <div class="form-grid">
-
-            <!-- Reference -->
-            <div class="form-group">
-              <label for="reference">
-                Référence <span>*</span>
-              </label>
-              <input
-                type="text"
-                id="reference"
-                placeholder="Ex: PRD001"
-                required
-              >
-            </div>
-
-            <!-- Price -->
-            <div class="form-group">
-              <label for="price">
-                Prix unitaire HT <span>*</span>
-              </label>
-              <div class="input-unit">
-                <input
-                  type="number"
-                  id="price"
-                  placeholder="0.00"
-                  min="0"
-                  step="0.01"
-                  required
-                >
-                <span>TND</span>
-              </div>
-            </div>
-
-            <!-- Product name -->
-            <div class="form-group">
-              <label for="name">
-                Nom du produit <span>*</span>
-              </label>
-              <input
-                type="text"
-                id="name"
-                placeholder="Ex: Laptop HP"
-                required
-              >
-            </div>
-
-            <!-- Stock -->
-            <div class="form-group">
-              <label for="stock">
-                Quantité en stock <span>*</span>
-              </label>
-              <input
-                type="number"
-                id="stock"
-                placeholder="0"
-                min="0"
-                required
-              >
-            </div>
-
-            <!-- Description -->
-            <div class="form-group">
-              <label for="description">
-                Description
-              </label>
-              <textarea
-                id="description"
-                placeholder="Description du produit..."
-                rows="3"
-              ></textarea>
-            </div>
-
-            <!-- Date -->
-            <div class="form-group">
-              <label for="date">
-                Date de création
-              </label>
-              <input
-                type="date"
-                id="date"
-              >
-            </div>
-
+        <div class="form-group">
+          <label for="price">Prix unitaire HT <span>*</span></label>
+          <div class="input-unit">
+            <input type="number" id="price" formControlName="unitPriceHT"
+                   placeholder="0.00" min="0" step="0.01" />
+            <span>TND</span>
           </div>
+          @if (form.controls.unitPriceHT.touched && form.controls.unitPriceHT.errors) {
+            <small class="error-text">Prix obligatoire (supérieur ou égal à 0).</small>
+          }
+        </div>
 
-          <!-- Buttons -->
-          <div class="form-actions">
-            <button type="button" class="btn-cancel">
-              ↻ Annuler
-            </button>
+        <div class="form-group">
+          <label for="name">Nom du produit <span>*</span></label>
+          <input type="text" id="name" formControlName="name" placeholder="Ex: Laptop HP" />
+          @if (form.controls.name.touched && form.controls.name.errors) {
+            <small class="error-text">Le nom est obligatoire (150 caractères maximum).</small>
+          }
+        </div>
 
-            <button type="submit" class="btn-save">
-              ▣ Enregistrer
-            </button>
-          </div>
+        <div class="form-group">
+          <label for="stock">Quantité en stock <span>*</span></label>
+          <input type="number" id="stock" formControlName="stockQuantity"
+                 placeholder="0" min="0" step="1" />
+          @if (form.controls.stockQuantity.touched && form.controls.stockQuantity.errors) {
+            <small class="error-text">Stock obligatoire (nombre entier supérieur ou égal à 0).</small>
+          }
+        </div>
 
-        </form>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" formControlName="description"
+                    placeholder="Description du produit..." rows="3"></textarea>
+          @if (form.controls.description.touched && form.controls.description.errors) {
+            <small class="error-text">Description trop longue (500 caractères maximum).</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="date">Date de création</label>
+          <input type="date" id="date" [value]="createdAt()" disabled />
+        </div>
 
       </div>
 
-    </section>
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="close()">Annuler</button>
+        <button type="submit" class="btn-save" [disabled]="saving()">
+          {{ saving() ? 'Enregistrement...' : 'Enregistrer' }}
+        </button>
+      </div>
 
-  </main>
+    </form>
+  </div>
 </div>

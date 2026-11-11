@@ -1,0 +1,41 @@
+<div class="dialog-overlay" (click)="close()">
+  <div class="dialog-box" (click)="$event.stopPropagation()">
+
+    <div class="dialog-header">
+      <div class="dialog-title">
+        <span class="dialog-icon">◇</span>
+        <h2>Détails du produit</h2>
+      </div>
+      <button type="button" class="dialog-close" aria-label="Fermer" (click)="close()">×</button>
+    </div>
+
+    <div class="dialog-body">
+      @if (product(); as p) {
+        <div class="detail-layout">
+
+          <div class="detail-photo">
+            <img src="images/product-default.png" [alt]="p.name" />
+          </div>
+
+          <dl class="detail-info">
+            <dt>Référence :</dt>   <dd>{{ p.reference }}</dd>
+            <dt>Nom :</dt>         <dd>{{ p.name }}</dd>
+            <dt>Description :</dt> <dd>{{ p.description || '—' }}</dd>
+            <dt>Prix unitaire HT :</dt> <dd>{{ p.unitPriceHT | number:'1.2-2' }} TND</dd>
+            <dt>Quantité en stock :</dt> <dd>{{ p.stockQuantity }}</dd>
+            <dt>Date de création :</dt>  <dd>{{ p.createdAt | date:'dd/MM/yyyy' }}</dd>
+          </dl>
+
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="close()">← Retour</button>
+          <button type="button" class="btn-save" (click)="edit(p)">✎ Modifier</button>
+        </div>
+      } @else {
+        <p class="empty">Chargement...</p>
+      }
+    </div>
+
+  </div>
+</div>

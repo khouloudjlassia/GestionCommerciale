@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
 import { ClientService } from '../../services/client';
 import { NotificationService } from '../../services/notification';
 import { ClientModel } from '../../models/models';
-
+import { ConfirmService } from '../../services/confirm';
 @Component({
   selector: 'app-client-list',
   imports: [RouterLink, DatePipe],
@@ -14,7 +14,7 @@ import { ClientModel } from '../../models/models';
 export class ClientList implements OnInit {
   private clientService = inject(ClientService);
   private notifier = inject(NotificationService);
-
+private confirmService = inject(ConfirmService); 
   private readonly pageSize = 5;
 
   clients = signal<ClientModel[]>([]);
@@ -69,15 +69,19 @@ export class ClientList implements OnInit {
     if (page >= 1 && page <= this.totalPages()) this.page.set(page);
   }
 
-  remove(client: ClientModel): void {
-    if (!confirm(`Supprimer le client ${client.lastName} ${client.firstName} ?`)) return;
+  async remove(client: ClientModel): Promise<void> {
+  const confirmed = await this.confirmService.ask({
+    title: 'Supprimer le client',
+    message: `Voulez-vous vraiment supprimer ${client.lastName} ${client.firstName} ? Cette action est irréversible.`,
+    confirmLabel: 'Supprimer',
+  });
+  if (!confirmed) return;
 
-    this.clientService.delete(client.id).subscribe({
-      next: () => {
-        this.notifier.success('Client supprimé.');
-        this.load();
-      },
-      error: err => this.notifier.error(this.notifier.fromHttp(err)),
-    });
-  }
-}
+  this.clientService.delete(client.id).subscribe({
+    next: () => {
+      this.notifier.success('Client supprimé.');
+      this.load();
+    },
+    error: err => this.notifier.error(this.notifier.fromHttp(err)),
+  });
+}}
