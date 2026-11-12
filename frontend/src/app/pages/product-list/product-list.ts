@@ -69,8 +69,7 @@ export class ProductList implements OnInit {
   async remove(product: ProductModel): Promise<void> {
     const confirmed = await this.confirmService.ask({
       title: 'Supprimer le produit',
-      message: `Voulez-vous vraiment supprimer « ${product.name} » ? Cette action est irréversible.`,
-      confirmLabel: 'Supprimer',
+      message: `Voulez-vous vraiment supprimer « ${product.name} » ?`, confirmLabel: 'Supprimer',
     });
     if (!confirmed) return;
 

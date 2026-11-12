@@ -10,5 +10,9 @@ export class OrderService extends CrudService<OrderModel, OrderPayload> {
   // POST /api/orders/{id}/validate : valide la commande et met à jour le stock
   validate(id: number): Observable<unknown> {
     return this.http.post(`${this.url}/${id}/validate`, {});
+
+  }
+  cancel(id: number): Observable<unknown> {
+    return this.http.post(`${this.url}/${id}/cancel`, {});
   }
 }

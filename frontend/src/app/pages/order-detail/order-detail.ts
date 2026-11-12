@@ -9,7 +9,7 @@ import { statusInfo, isDraft } from '../../core/order-helpers';
 
 @Component({
   selector: 'app-order-detail',
-  imports: [DatePipe, DecimalPipe],
+  imports: [DatePipe, DecimalPipe], // ✅ Indispensable pour la date et les prix
   templateUrl: './order-detail.html',
   styleUrl: './order-detail.css',
   host: { '(document:keydown.escape)': 'close()' },
@@ -56,6 +56,24 @@ export class OrderDetail implements OnInit {
     this.orderService.validate(order.id).subscribe({
       next: () => {
         this.notifier.success('Commande validée, stock mis à jour.');
+        this.close();
+      },
+      error: err => this.notifier.error(this.notifier.fromHttp(err)),
+    });
+  }
+
+  async cancel(order: OrderModel): Promise<void> {
+    const confirmed = await this.confirmService.ask({
+      title: 'Annuler la commande',
+      message: `Voulez-vous vraiment annuler la commande ${order.orderNumber} ?` +
+        (order.status === 'Validated' ? ' Les produits seront réintégrés dans le stock.' : ''),
+      confirmLabel: 'Annuler la commande',
+    });
+    if (!confirmed) return;
+
+    this.orderService.cancel(order.id).subscribe({
+      next: () => {
+        this.notifier.success('Commande annulée avec succès.');
         this.close();
       },
       error: err => this.notifier.error(this.notifier.fromHttp(err)),

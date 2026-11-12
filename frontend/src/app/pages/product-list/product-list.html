@@ -7,12 +7,8 @@
 </div>
 
 <div class="toolbar">
-  <input
-    type="search"
-    placeholder="Rechercher un produit..."
-    [value]="search()"
-    (input)="search.set($any($event.target).value)"
-  />
+  <input type="search" placeholder="Rechercher un produit..." [value]="search()"
+    (input)="search.set($any($event.target).value)" />
 </div>
 
 <div class="table-card">
@@ -31,24 +27,24 @@
     </thead>
     <tbody>
       @for (p of filtered(); track p.id) {
-        <tr>
-          <td>{{ p.id }}</td>
-          <td>{{ p.reference }}</td>
-          <td>{{ p.name }}</td>
-          <td>{{ p.description || '—' }}</td>
-          <td>{{ p.unitPriceHT | number:'1.2-2' }} TND</td>
-          <td>{{ p.stockQuantity }}</td>
-          <td>{{ p.createdAt | date:'dd/MM/yyyy' }}</td>
-          <td class="actions">
-            <a class="icon-btn view" title="Détails" [routerLink]="['/products', p.id]">◉</a>
-            <a class="icon-btn edit" title="Modifier" [routerLink]="['/products', p.id, 'edit']">✎</a>
-            <button class="icon-btn delete" type="button" title="Supprimer" (click)="remove(p)">▣</button>
-          </td>
-        </tr>
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.reference }}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.description || '—' }}</td>
+        <td>{{ p.unitPriceHT | number:'1.2-2' }} TND</td>
+        <td>{{ p.stockQuantity }}</td>
+        <td>{{ p.createdAt | date:'dd/MM/yyyy' }}</td>
+        <td class="actions">
+          <a class="icon-btn view" title="Détails" [routerLink]="['/products', p.id]">◉</a>
+          <a class="icon-btn edit" title="Modifier" [routerLink]="['/products', p.id, 'edit']">✎</a>
+          <button class="icon-btn delete" type="button" title="Supprimer" (click)="remove(p)">🗑️</button>
+        </td>
+      </tr>
       } @empty {
-        <tr>
-          <td colspan="8" class="empty">{{ loading() ? 'Chargement...' : 'Aucun produit.' }}</td>
-        </tr>
+      <tr>
+        <td colspan="8" class="empty">{{ loading() ? 'Chargement...' : 'Aucun produit.' }}</td>
+      </tr>
       }
     </tbody>
   </table>

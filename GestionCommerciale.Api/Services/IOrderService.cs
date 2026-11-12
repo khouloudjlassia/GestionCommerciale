@@ -10,4 +10,5 @@ public interface IOrderService
     Task<OrderDto> UpdateAsync(int id, OrderCreateDto dto);
     Task<OrderDto> ValidateAsync(int id);
     Task DeleteAsync(int id);
+    Task<OrderDto> CancelAsync(int id);
 }

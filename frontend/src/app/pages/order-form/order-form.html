@@ -1,112 +1,165 @@
 <div class="dialog-overlay" (click)="close()">
-  <div class="dialog-box dialog-wide" (click)="$event.stopPropagation()">
+  <div class="dialog-box dialog-order" (click)="$event.stopPropagation()">
 
+    <!-- En-tête -->
     <div class="dialog-header">
       <div class="dialog-title">
-        <span class="dialog-icon">🛒</span>
-        <h2>{{ orderId() ? 'Modifier la commande' : 'Nouvelle commande' }}</h2>
+        <div class="avatar-badge">🛒</div>
+        <div>
+          <h2>{{ orderId() ? 'Modifier la commande #' + orderId() : 'Nouvelle commande' }}</h2>
+          <span class="subtitle">Saisie des informations commerciales et des lignes de commande</span>
+        </div>
       </div>
       <button type="button" class="dialog-close" aria-label="Fermer" (click)="close()">×</button>
     </div>
 
     <div class="dialog-body">
 
+      <!-- Stepper d'avancement -->
       <div class="stepper">
         <div class="step" [class.active]="step() === 1" [class.done]="step() > 1">
-          <span class="step-num">1</span> Client
+          <span class="step-num">1</span>
+          <span>1. Choix du client</span>
         </div>
+        <div class="step-divider"></div>
         <div class="step" [class.active]="step() === 2" [class.done]="step() > 2">
-          <span class="step-num">2</span> Produits
+          <span class="step-num">2</span>
+          <span>2. Produits & Quantités</span>
         </div>
+        <div class="step-divider"></div>
         <div class="step" [class.active]="step() === 3">
-          <span class="step-num">3</span> Récapitulatif
+          <span class="step-num">3</span>
+          <span>3. Récapitulatif & Totaux</span>
         </div>
       </div>
 
-      <div class="order-layout">
-
-        <div class="panel">
-          <div class="form-group">
-            <label for="client">Client <span>*</span></label>
-            <select id="client" (change)="setClient($any($event.target).value)">
-              <option value="">Sélectionner...</option>
-              @for (c of clients(); track c.id) {
-                <option [value]="c.id" [selected]="c.id === clientId()">{{ c.lastName }} {{ c.firstName }}</option>
-              }
-            </select>
-            @if (submitted() && clientId() === null) {
-              <small class="error-text">Le client est obligatoire.</small>
+      <!-- Section 1 : Sélection du Client -->
+      <div class="form-section">
+        <div class="section-title">
+          <span class="section-icon">👤</span>
+          <h3>Client associé <span>*</span></h3>
+        </div>
+        <div class="form-group select-client-group">
+          <select id="client" class="styled-select" (change)="setClient($any($event.target).value)">
+            <option value="">-- Sélectionnez un client dans la liste --</option>
+            @for (c of clients(); track c.id) {
+            <option [value]="c.id" [selected]="c.id === clientId()">
+              {{ c.lastName }} {{ c.firstName }} ({{ c.email }})
+            </option>
             }
+          </select>
+          @if (submitted() && clientId() === null) {
+          <small class="error-text">Le client est obligatoire.</small>
+          }
+        </div>
+      </div>
+
+      <!-- Section 2 : Lignes de commande -->
+      <div class="form-section">
+        <div class="section-header-row">
+          <div class="section-title">
+            <span class="section-icon">📦</span>
+            <h3>Articles commandés</h3>
           </div>
+          <button type="button" class="btn btn-add" (click)="addLine()">
+            + Ajouter un article
+          </button>
         </div>
 
-        <div class="panel">
-          <h4>Produits</h4>
-          <table class="line-table">
+        <div class="table-container">
+          <table class="styled-table">
             <thead>
               <tr>
-                <th>Produit</th>
-                <th>Prix unitaire</th>
-                <th>Quantité</th>
-                <th>Total ligne</th>
-                <th>Action</th>
+                <th style="width: 40%;">Produit</th>
+                <th style="width: 20%;">Prix unitaire HT</th>
+                <th style="width: 15%;">Quantité</th>
+                <th style="width: 20%;">Total ligne HT</th>
+                <th style="width: 5%; text-align: center;">Action</th>
               </tr>
             </thead>
             <tbody>
               @for (l of lines(); track $index; let i = $index) {
-                <tr>
-                  <td>
-                    <select (change)="setProduct(i, $any($event.target).value)">
-                      <option value="">Choisir...</option>
-                      @for (p of products(); track p.id) {
-                        <option [value]="p.id" [selected]="p.id === l.productId">{{ p.name }}</option>
-                      }
-                    </select>
-                  </td>
-                  <td>{{ unitPrice(l) | number:'1.2-2' }} TND</td>
-                  <td>
-                    <input type="number" min="1" step="1"
-                           [value]="l.quantity"
-                           (input)="setQuantity(i, $any($event.target).value)" />
-                    @if (submitted() && lineError(l); as message) {
-                      <small class="error-text">{{ message }}</small>
+              <tr>
+                <td>
+                  <select class="styled-select table-select" (change)="setProduct(i, $any($event.target).value)">
+                    <option value="">Sélectionner un produit...</option>
+                    @for (p of products(); track p.id) {
+                    <option [value]="p.id" [selected]="p.id === l.productId">
+                      {{ p.name }} (Réf: {{ p.reference }} | Stock: {{ p.stockQuantity }})
+                    </option>
                     }
-                  </td>
-                  <td>{{ lineTotal(l) | number:'1.2-2' }} TND</td>
-                  <td>
-                    <button type="button" class="icon-btn delete" title="Retirer" (click)="removeLine(i)">▣</button>
-                  </td>
-                </tr>
+                  </select>
+                </td>
+                <td class="price-cell">
+                  {{ unitPrice(l) | number:'1.2-2' }} <span class="currency">TND</span>
+                </td>
+                <td>
+                  <input type="number" min="1" step="1" class="styled-input qty-input" [value]="l.quantity"
+                    (input)="setQuantity(i, $any($event.target).value)" />
+                  @if (submitted() && lineError(l); as message) {
+                  <small class="error-text block-error">{{ message }}</small>
+                  }
+                </td>
+                <td class="total-cell">
+                  <strong>{{ lineTotal(l) | number:'1.2-2' }}</strong> <span class="currency">TND</span>
+                </td>
+                <td style="text-align: center;">
+                  <button type="button" class="icon-btn delete" title="Retirer cette ligne" (click)="removeLine(i)">
+                    ✕
+                  </button>
+                </td>
+              </tr>
               } @empty {
-                <tr><td colspan="5" class="empty">Aucun produit ajouté.</td></tr>
+              <tr>
+                <td colspan="5" class="empty-state">
+                  <p>Aucun produit n'a été ajouté à cette commande.</p>
+                  <button type="button" class="btn btn-secondary" (click)="addLine()">
+                    + Cliquez ici pour ajouter votre premier produit
+                  </button>
+                </td>
+              </tr>
               }
             </tbody>
           </table>
-
-          <button type="button" class="btn" (click)="addLine()">+ Ajouter un produit</button>
         </div>
-
-        <div class="panel totals">
-          <div class="totals-row"><span>Total HT :</span><strong>{{ totalHT() | number:'1.2-2' }} TND</strong></div>
-          <div class="totals-row"><span>TVA (19%) :</span><strong>{{ vat() | number:'1.2-2' }} TND</strong></div>
-          <div class="totals-row totals-ttc"><span>Total TTC :</span><strong>{{ totalTTC() | number:'1.2-2' }} TND</strong></div>
-        </div>
-
       </div>
 
+      <!-- Section 3 : Récapitulatif Financier (Cahier des charges : TVA 19%) -->
+      <div class="summary-section">
+        <div class="totals-card">
+          <div class="total-line">
+            <span>Total HT :</span>
+            <span>{{ totalHT() | number:'1.2-2' }} TND</span>
+          </div>
+          <div class="total-line">
+            <span>TVA (Fixe 19%) :</span>
+            <span>{{ vat() | number:'1.2-2' }} TND</span>
+          </div>
+          <div class="total-line ttc-line">
+            <span>Total TTC :</span>
+            <strong>{{ totalTTC() | number:'1.2-2' }} TND</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alertes d'erreurs éventuelles -->
       @if (submitted() && problems().length > 0) {
-        <ul class="problems">
-          @for (p of problems(); track p) { <li class="error-text">{{ p }}</li> }
+      <div class="problems-alert">
+        <strong>Veuillez corriger les points suivants :</strong>
+        <ul>
+          @for (p of problems(); track p) { <li>{{ p }}</li> }
         </ul>
+      </div>
       }
 
+      <!-- Boutons d'actions -->
       <div class="form-actions">
         <button type="button" class="btn-cancel" (click)="close()">Annuler</button>
-        <button type="button" class="btn-cancel" [disabled]="saving()" (click)="save(false)">
-          Enregistrer en brouillon
+        <button type="button" class="btn-draft" [disabled]="saving()" (click)="save(false)">
+          💾 Enregistrer en brouillon
         </button>
         <button type="button" class="btn-save" [disabled]="saving()" (click)="save(true)">
-          {{ saving() ? 'Enregistrement...' : 'Valider la commande' }}
+          {{ saving() ? 'Validation...' : '✓ Valider la commande' }}
         </button>
       </div>
 

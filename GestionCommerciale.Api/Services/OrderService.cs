@@ -95,6 +95,25 @@ public class OrderService : IOrderService
         _orders.Remove(order); // les lignes sont supprimées en cascade
         await _orders.SaveChangesAsync();
     }
+    public async Task<OrderDto> CancelAsync(int id)
+{
+    var order = await GetOrThrowAsync(id);
+
+    if (order.Status == OrderStatus.Cancelled)
+        throw new BusinessRuleException("Cette commande est déjà annulée.");
+
+    // Règle métier : Si la commande avait été validée, on réintègre les quantités dans le stock
+    if (order.Status == OrderStatus.Validated)
+    {
+        foreach (var line in order.Lines)
+            line.Product.StockQuantity += line.Quantity;
+    }
+
+    order.Status = OrderStatus.Cancelled;
+
+    await _orders.SaveChangesAsync();
+    return ToDto(order);
+}
 
     // ---------- Méthodes privées ----------
 

@@ -44,7 +44,7 @@
             @if (isDraft(o.status)) {
               <a class="icon-btn edit" title="Modifier" [routerLink]="['/orders', o.id, 'edit']">✎</a>
             }
-            <button class="icon-btn delete" type="button" title="Supprimer" (click)="remove(o)">▣</button>
+            <button class="icon-btn delete" type="button" title="Supprimer" (click)="remove(o)">🗑️</button>
           </td>
         </tr>
       } @empty {

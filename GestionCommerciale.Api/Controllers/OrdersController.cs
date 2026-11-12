@@ -44,4 +44,7 @@ public class OrdersController : ControllerBase
         await _service.DeleteAsync(id);
         return NoContent();
     }
+    [HttpPost("{id:int}/cancel")]
+public async Task<ActionResult<OrderDto>> Cancel(int id) =>
+    Ok(await _service.CancelAsync(id));
 }

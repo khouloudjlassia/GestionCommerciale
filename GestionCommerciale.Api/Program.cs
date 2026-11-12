@@ -38,9 +38,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger(c => c.SerializeAsV2 = true);
     app.UseSwaggerUI();
 }
-app.MapControllers(); 
 app.UseHttpsRedirection();
 app.UseCors(FrontendCorsPolicy);
+app.MapControllers();
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"

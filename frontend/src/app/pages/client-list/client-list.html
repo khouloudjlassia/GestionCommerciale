@@ -38,7 +38,7 @@
         <td class="actions">
           <a class="icon-btn view" title="Détails" [routerLink]="['/clients', c.id]">◉</a>
           <a class="icon-btn edit" title="Modifier" [routerLink]="['/clients', c.id, 'edit']">✎</a>
-          <button class="icon-btn delete" type="button" title="Supprimer" (click)="remove(c)">🗑</button>
+          <button class="icon-btn delete" type="button" title="Supprimer" (click)="remove(c)">🗑️</button>
         </td>
       </tr>
       } @empty {
@@ -58,4 +58,4 @@
   </div>
 
 </div>
-<!-- Pour afficher la modal par dessus la liste -->  <router-outlet />
+<!-- Pour afficher la modal par dessus la liste --> <router-outlet />

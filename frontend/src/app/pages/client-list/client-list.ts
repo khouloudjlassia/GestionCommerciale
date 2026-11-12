@@ -72,8 +72,7 @@ export class ClientList implements OnInit {
   async remove(client: ClientModel): Promise<void> {
     const confirmed = await this.confirmService.ask({
       title: 'Supprimer le client',
-      message: `Voulez-vous vraiment supprimer ${client.lastName} ${client.firstName} ? Cette action est irréversible.`,
-      confirmLabel: 'Supprimer',
+      message: `Voulez-vous vraiment supprimer ${client.lastName} ${client.firstName} ?`, confirmLabel: 'Supprimer',
     });
     if (!confirmed) return;
 

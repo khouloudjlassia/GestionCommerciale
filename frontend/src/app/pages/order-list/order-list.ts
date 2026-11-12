@@ -88,8 +88,7 @@ export class OrderList implements OnInit {
   async remove(order: OrderModel): Promise<void> {
     const confirmed = await this.confirmService.ask({
       title: 'Supprimer la commande',
-      message: `Voulez-vous vraiment supprimer la commande ${order.orderNumber} ? Cette action est irréversible.`,
-      confirmLabel: 'Supprimer',
+      message: `Voulez-vous vraiment supprimer la commande ${order.orderNumber} ?`, confirmLabel: 'Supprimer',
     });
     if (!confirmed) return;
 

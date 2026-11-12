@@ -1,67 +1,122 @@
 <div class="dialog-overlay" (click)="close()">
-  <div class="dialog-box dialog-wide" (click)="$event.stopPropagation()">
+  <div class="dialog-box dialog-order" (click)="$event.stopPropagation()">
 
+    <!-- En-tête compact avec Statut directement dans le header -->
     <div class="dialog-header">
       <div class="dialog-title">
-        <span class="dialog-icon">🛒</span>
-        <h2>Détail de la commande</h2>
+        <div class="avatar-badge">🛒</div>
+        <div>
+          <div class="title-with-badge">
+            <h2>Commande {{ order()?.orderNumber }}</h2>
+            @if (order(); as o) {
+            <span [class]="'badge ' + statusInfo(o.status).css">
+              {{ statusInfo(o.status).label }}
+            </span>
+            }
+          </div>
+          <span class="subtitle">Détails commerciaux et liste des articles commandés</span>
+        </div>
       </div>
       <button type="button" class="dialog-close" aria-label="Fermer" (click)="close()">×</button>
     </div>
 
+    <!-- Corps -->
     <div class="dialog-body">
       @if (order(); as o) {
-        <div class="detail-layout">
 
-          <dl class="detail-info">
-            <dt>N° Commande :</dt>      <dd>{{ o.orderNumber }}</dd>
-            <dt>Client :</dt>           <dd>{{ o.clientName }}</dd>
-            <dt>Date de commande :</dt> <dd>{{ o.orderDate | date:'dd/MM/yyyy' }}</dd>
-            <dt>Statut :</dt>
-            <dd><span [class]="'badge ' + statusInfo(o.status).css">{{ statusInfo(o.status).label }}</span></dd>
-          </dl>
+      <!-- Bandeau récapitulatif compact (SANS aucun ID client) -->
+      <div class="summary-bar">
+        <div class="summary-item">
+          <span class="lbl">Client :</span>
+          <span class="val bold">{{ o.clientName }}</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-item">
+          <span class="lbl">Date de commande :</span>
+          <span class="val">{{ o.orderDate | date:'dd/MM/yyyy à HH:mm' }}</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-item">
+          <span class="lbl">Statut actuel :</span>
+          <span [class]="'badge ' + statusInfo(o.status).css">
+            {{ statusInfo(o.status).label }}
+          </span>
+        </div>
+      </div>
 
-          <div class="panel">
-            <h4>Produits commandés</h4>
-            <table>
-              <thead>
-                <tr>
-                  <th>Produit</th>
-                  <th>Quantité</th>
-                  <th>Prix unitaire</th>
-                  <th>Total ligne</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (l of o.lines; track $index) {
-                  <tr>
-                    <td>{{ l.productName }}</td>
-                    <td>{{ l.quantity }}</td>
-                    <td>{{ l.unitPrice | number:'1.2-2' }} TND</td>
-                    <td>{{ l.lineTotal | number:'1.2-2' }} TND</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
+      <!-- Tableau des Lignes de commande -->
+      <div class="items-section">
+        <div class="section-title">
+          <span class="section-icon">📦</span>
+          <h3>Articles commandés ({{ o.lines.length }})</h3>
+        </div>
+
+        <div class="table-container">
+          <table class="styled-table">
+            <thead>
+              <tr>
+                <th style="width: 15%;">Réf.</th>
+                <th style="width: 40%;">Nom du Produit</th>
+                <th style="width: 15%; text-align: center;">Quantité</th>
+                <th style="width: 15%; text-align: right;">Prix HT</th>
+                <th style="width: 15%; text-align: right;">Total HT</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (l of o.lines; track $index) {
+              <tr>
+                <td class="ref-cell">{{ l.productReference || '—' }}</td>
+                <td class="name-cell"><strong>{{ l.productName }}</strong></td>
+                <td style="text-align: center;"><span class="qty-badge">{{ l.quantity }}</span></td>
+                <td style="text-align: right;">{{ l.unitPrice | number:'1.2-2' }} TND</td>
+                <td style="text-align: right;" class="total-cell">
+                  <strong>{{ l.lineTotal | number:'1.2-2' }} TND</strong>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Bloc Totaux Financiers (TVA 19%) -->
+      <div class="totals-wrapper">
+        <div class="totals-card">
+          <div class="total-row">
+            <span>Total HT :</span>
+            <span>{{ o.totalHT | number:'1.2-2' }} TND</span>
           </div>
-
+          <div class="total-row">
+            <span>TVA (19%) :</span>
+            <span>{{ (o.totalTTC - o.totalHT) | number:'1.2-2' }} TND</span>
+          </div>
+          <div class="total-row ttc-row">
+            <span>Total TTC :</span>
+            <strong>{{ o.totalTTC | number:'1.2-2' }} TND</strong>
+          </div>
         </div>
+      </div>
 
-        <p class="detail-totals">
-          Total HT : <strong>{{ o.totalHT | number:'1.2-2' }} TND</strong>
-          <span class="sep">|</span>
-          Total TTC : <strong>{{ o.totalTTC | number:'1.2-2' }} TND</strong>
-        </p>
+      <!-- Actions : toujours visibles en bas -->
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="close()">← Retour</button>
 
-        <div class="form-actions">
-          <button type="button" class="btn-cancel" (click)="close()">← Retour</button>
-          @if (isDraft(o.status)) {
-            <button type="button" class="btn-cancel" (click)="edit(o)">✎ Modifier</button>
-            <button type="button" class="btn-save" (click)="validate(o)">Valider la commande</button>
-          }
-        </div>
+        @if (isDraft(o.status)) {
+        <button type="button" class="btn-edit" (click)="edit(o)">✎ Modifier</button>
+        <button type="button" class="btn-save" (click)="validate(o)">✓ Valider la commande</button>
+        }
+
+        @if (o.status !== 'Cancelled') {
+        <button type="button" class="btn btn-danger" (click)="cancel(o)">
+          🚫 Annuler la commande
+        </button>
+        }
+      </div>
+
       } @else {
-        <p class="empty">Chargement...</p>
+      <div class="loading-state">
+        <p>Chargement des détails...</p>
+      </div>
       }
     </div>
 
