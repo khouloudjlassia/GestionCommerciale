@@ -70,6 +70,7 @@ public class ProductService : IProductService
         product.Description = dto.Description?.Trim();
         product.UnitPriceHT = dto.UnitPriceHT;
         product.StockQuantity = dto.StockQuantity;
+        product.ImageUrl = dto.ImageUrl?.Trim();
     }
 
     private static ProductDto ToDto(Product p) => new()
@@ -80,6 +81,7 @@ public class ProductService : IProductService
         Description = p.Description,
         UnitPriceHT = p.UnitPriceHT,
         StockQuantity = p.StockQuantity,
+        ImageUrl = p.ImageUrl,
         CreatedAt = p.CreatedAt
     };
 }

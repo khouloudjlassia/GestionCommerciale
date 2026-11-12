@@ -29,7 +29,8 @@ export class OrderForm implements OnInit {
   private productService = inject(ProductService);
   private notifier = inject(NotificationService);
 
-  orderId = signal<number | null>(null);   // null = création
+  orderId = signal<number | null>(null);       // null = création
+  orderNumber = signal<string | null>(null);   // numéro lisible ex: CMD-20261112-001
   clients = signal<ClientModel[]>([]);
   products = signal<ProductModel[]>([]);
   clientId = signal<number | null>(null);
@@ -70,6 +71,7 @@ export class OrderForm implements OnInit {
         this.products.set(products);
         if (order) {
           this.orderId.set(order.id);
+          this.orderNumber.set(order.orderNumber);
           this.clientId.set(order.clientId);
           this.lines.set(order.lines.map(l => ({ productId: l.productId, quantity: l.quantity })));
         }

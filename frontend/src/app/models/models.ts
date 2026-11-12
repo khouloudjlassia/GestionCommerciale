@@ -30,6 +30,7 @@ export interface ProductModel {
   description: string | null;
   unitPriceHT: number;
   stockQuantity: number;
+  imageUrl: string | null;
   createdAt: string;
 }
 
@@ -40,6 +41,7 @@ export interface ProductPayload {
   description: string | null;
   unitPriceHT: number;
   stockQuantity: number;
+  imageUrl: string | null;
 }
 
 /* ========== COMMANDES ========== */

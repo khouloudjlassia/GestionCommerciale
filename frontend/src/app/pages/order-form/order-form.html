@@ -6,7 +6,7 @@
       <div class="dialog-title">
         <div class="avatar-badge">🛒</div>
         <div>
-          <h2>{{ orderId() ? 'Modifier la commande #' + orderId() : 'Nouvelle commande' }}</h2>
+          <h2>{{ orderId() ? 'Modifier ' + (orderNumber() ?? 'commande #' + orderId()) : 'Nouvelle commande' }}</h2>
           <span class="subtitle">Saisie des informations commerciales et des lignes de commande</span>
         </div>
       </div>

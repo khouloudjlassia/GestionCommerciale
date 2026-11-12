@@ -22,6 +22,7 @@ export class ProductForm implements OnInit {
   // null = création, nombre = modification
   productId = signal<number | null>(null);
   saving = signal(false);
+  previewImage = signal<string | null>(null);
   // Affichée en lecture seule : la date est fixée par l'API, jamais envoyée
   createdAt = signal(new Date().toISOString().slice(0, 10));
 
@@ -31,6 +32,7 @@ export class ProductForm implements OnInit {
     description:   ['', [Validators.maxLength(500)]],
     unitPriceHT:   [0,  [Validators.required, Validators.min(0)]],
     stockQuantity: [0,  [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)]],
+    imageUrl:      [''],
   });
 
   ngOnInit(): void {
@@ -46,7 +48,11 @@ export class ProductForm implements OnInit {
           description: product.description ?? '',
           unitPriceHT: product.unitPriceHT,
           stockQuantity: product.stockQuantity,
+          imageUrl: product.imageUrl ?? '',
         });
+        if (product.imageUrl) {
+          this.previewImage.set(product.imageUrl);
+        }
         this.createdAt.set(product.createdAt.slice(0, 10));
       },
       error: err => {
@@ -54,6 +60,25 @@ export class ProductForm implements OnInit {
         this.router.navigate(['/products']);
       },
     });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result as string;
+      this.previewImage.set(base64);
+      this.form.patchValue({ imageUrl: base64 });
+    };
+    reader.readAsDataURL(file);
+  }
+
+  removePhoto(): void {
+    this.previewImage.set(null);
+    this.form.patchValue({ imageUrl: '' });
   }
 
   submit(): void {
@@ -66,6 +91,7 @@ export class ProductForm implements OnInit {
     const payload: ProductPayload = {
       ...value,
       description: value.description || null,   // l'API attend null pour un champ vide
+      imageUrl: value.imageUrl?.trim() || null,
     };
 
     const id = this.productId();

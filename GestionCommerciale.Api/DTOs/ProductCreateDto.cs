@@ -18,4 +18,6 @@ public class ProductCreateDto
 
     [Range(0, int.MaxValue)]
     public int StockQuantity { get; set; }
+
+    public string? ImageUrl { get; set; }
 }

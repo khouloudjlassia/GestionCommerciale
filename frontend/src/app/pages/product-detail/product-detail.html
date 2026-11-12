@@ -14,7 +14,11 @@
         <div class="detail-layout">
 
           <div class="detail-photo">
-            <img src="images/product-default.png" [alt]="p.name" />
+            @if (p.imageUrl) {
+              <img [src]="p.imageUrl" [alt]="p.name" style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 8px;" />
+            } @else {
+              <img src="images/product-default.png" [alt]="p.name" />
+            }
           </div>
 
           <dl class="detail-info">

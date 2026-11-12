@@ -1,13 +1,12 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
 import { ClientService } from '../../services/client';
 import { NotificationService } from '../../services/notification';
 import { ClientModel } from '../../models/models';
 
 @Component({
   selector: 'app-client-detail',
-  imports: [DatePipe],
+  imports: [],
   templateUrl: './client-detail.html',
   styleUrl: './client-detail.css',
   host: { '(document:keydown.escape)': 'close()' },
