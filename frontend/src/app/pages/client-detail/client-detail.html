@@ -1,0 +1,60 @@
+<div class="dialog-overlay" (click)="close()">
+    <div class="dialog-box dialog-custom" (click)="$event.stopPropagation()">
+
+        <!-- En-tête : Nom et prénom du client uniquement -->
+        <div class="dialog-header">
+            <div class="dialog-title">
+                <div class="avatar-badge">
+                    {{ client()?.firstName?.charAt(0) }}{{ client()?.lastName?.charAt(0) }}
+                </div>
+                <h2>{{ client()?.firstName }} {{ client()?.lastName }}</h2>
+            </div>
+            <button type="button" class="dialog-close" aria-label="Fermer" (click)="close()">×</button>
+        </div>
+
+        <!-- Corps : Une seule carte avec uniquement Nom, Prénom, Email, Téléphone et Adresse -->
+        <div class="dialog-body">
+            @if (client(); as c) {
+            <div class="single-card">
+
+                <div class="info-row">
+                    <span class="label">Nom :</span>
+                    <span class="value">{{ c.lastName }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">Prénom :</span>
+                    <span class="value">{{ c.firstName }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">Email :</span>
+                    <span class="value link">{{ c.email }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">Téléphone :</span>
+                    <span class="value">{{ c.phone || 'Non renseigné' }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">Adresse :</span>
+                    <span class="value">{{ c.address || 'Non renseignée' }}</span>
+                </div>
+
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" (click)="close()">← Retour à la liste</button>
+                <button type="button" class="btn-save" (click)="edit(c)">✏ Modifier ce client</button>
+            </div>
+            } @else {
+            <div class="loading-state">
+                <p>Chargement des informations...</p>
+            </div>
+            }
+        </div>
+
+    </div>
+</div>

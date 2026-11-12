@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ClientService } from '../../services/client';
 import { NotificationService } from '../../services/notification';
@@ -7,14 +7,14 @@ import { ClientModel } from '../../models/models';
 import { ConfirmService } from '../../services/confirm';
 @Component({
   selector: 'app-client-list',
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, RouterOutlet],
   templateUrl: './client-list.html',
   styleUrl: './client-list.css',
 })
 export class ClientList implements OnInit {
   private clientService = inject(ClientService);
   private notifier = inject(NotificationService);
-private confirmService = inject(ConfirmService); 
+  private confirmService = inject(ConfirmService);
   private readonly pageSize = 5;
 
   clients = signal<ClientModel[]>([]);
@@ -70,18 +70,19 @@ private confirmService = inject(ConfirmService);
   }
 
   async remove(client: ClientModel): Promise<void> {
-  const confirmed = await this.confirmService.ask({
-    title: 'Supprimer le client',
-    message: `Voulez-vous vraiment supprimer ${client.lastName} ${client.firstName} ? Cette action est irréversible.`,
-    confirmLabel: 'Supprimer',
-  });
-  if (!confirmed) return;
+    const confirmed = await this.confirmService.ask({
+      title: 'Supprimer le client',
+      message: `Voulez-vous vraiment supprimer ${client.lastName} ${client.firstName} ? Cette action est irréversible.`,
+      confirmLabel: 'Supprimer',
+    });
+    if (!confirmed) return;
 
-  this.clientService.delete(client.id).subscribe({
-    next: () => {
-      this.notifier.success('Client supprimé.');
-      this.load();
-    },
-    error: err => this.notifier.error(this.notifier.fromHttp(err)),
-  });
-}}
+    this.clientService.delete(client.id).subscribe({
+      next: () => {
+        this.notifier.success('Client supprimé.');
+        this.load();
+      },
+      error: err => this.notifier.error(this.notifier.fromHttp(err)),
+    });
+  }
+}
