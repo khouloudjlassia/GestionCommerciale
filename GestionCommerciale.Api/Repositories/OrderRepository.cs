@@ -28,6 +28,13 @@ public class OrderRepository : IOrderRepository
     public Task<int> CountByDateAsync(DateTime date) =>
         _context.Orders.CountAsync(o => o.OrderDate.Date == date.Date);
 
+    public Task<string?> GetLastOrderNumberByPrefixAsync(string prefix) =>
+        _context.Orders
+            .Where(o => o.OrderNumber.StartsWith(prefix))
+            .OrderByDescending(o => o.OrderNumber)
+            .Select(o => o.OrderNumber)
+            .FirstOrDefaultAsync();
+
     public async Task AddAsync(Order order) => await _context.Orders.AddAsync(order);
 
     public void Remove(Order order) => _context.Orders.Remove(order);

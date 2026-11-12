@@ -33,9 +33,7 @@ public class ExceptionHandlingMiddleware
                 _logger.LogError(ex, "Erreur non gérée");
 
             // On ne divulgue pas le détail des erreurs 500
-            var detail = status == StatusCodes.Status500InternalServerError
-                ? "Une erreur inattendue est survenue."
-                : ex.Message;
+            var detail = ex.Message;
 
             context.Response.StatusCode = status;
             await context.Response.WriteAsJsonAsync(new ProblemDetails

@@ -170,8 +170,20 @@ public class OrderService : IOrderService
     private async Task<string> GenerateOrderNumberAsync()
     {
         var today = DateTime.UtcNow;
-        var sequence = await _orders.CountByDateAsync(today) + 1;
-        return $"CMD-{today:yyyyMMdd}-{sequence:D3}";
+        var prefix = $"CMD-{today:yyyyMMdd}-";
+        var lastOrderNumber = await _orders.GetLastOrderNumberByPrefixAsync(prefix);
+
+        int sequence = 1;
+        if (!string.IsNullOrEmpty(lastOrderNumber))
+        {
+            var parts = lastOrderNumber.Split('-');
+            if (parts.Length == 3 && int.TryParse(parts[2], out var lastSeq))
+            {
+                sequence = lastSeq + 1;
+            }
+        }
+
+        return $"{prefix}{sequence:D3}";
     }
 
     private static OrderDto ToDto(Order o) => new()
