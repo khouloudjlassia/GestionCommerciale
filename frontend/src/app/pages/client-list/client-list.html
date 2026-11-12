@@ -15,7 +15,6 @@
   <table>
     <thead>
       <tr>
-        <th>ID</th>
         <th>Nom</th>
         <th>Prénom / Raison sociale</th>
         <th>Email</th>
@@ -28,7 +27,6 @@
     <tbody>
       @for (c of paged(); track c.id) {
       <tr>
-        <td>{{ c.id }}</td>
         <td>{{ c.lastName }}</td>
         <td>{{ c.firstName }}</td>
         <td>{{ c.email }}</td>
@@ -43,7 +41,7 @@
       </tr>
       } @empty {
       <tr>
-        <td colspan="8" class="empty">{{ loading() ? 'Chargement...' : 'Aucun client.' }}</td>
+        <td colspan="7" class="empty">{{ loading() ? 'Chargement...' : 'Aucun client.' }}</td>
       </tr>
       }
     </tbody>

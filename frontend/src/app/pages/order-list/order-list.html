@@ -19,7 +19,6 @@
   <table>
     <thead>
       <tr>
-        <th>ID</th>
         <th>N° Commande</th>
         <th>Client</th>
         <th>Date de commande</th>
@@ -32,7 +31,6 @@
     <tbody>
       @for (o of paged(); track o.id) {
         <tr>
-          <td>{{ o.id }}</td>
           <td>{{ o.orderNumber }}</td>
           <td>{{ o.clientName }}</td>
           <td>{{ o.orderDate | date:'dd/MM/yyyy' }}</td>
@@ -49,7 +47,7 @@
         </tr>
       } @empty {
         <tr>
-          <td colspan="8" class="empty">{{ loading() ? 'Chargement...' : 'Aucune commande.' }}</td>
+          <td colspan="7" class="empty">{{ loading() ? 'Chargement...' : 'Aucune commande.' }}</td>
         </tr>
       }
     </tbody>
