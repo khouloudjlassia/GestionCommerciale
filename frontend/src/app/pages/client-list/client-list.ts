@@ -1,6 +1,8 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { filter, skip } from 'rxjs';
 import { ClientService } from '../../services/client';
 import { NotificationService } from '../../services/notification';
 import { ClientModel } from '../../models/models';
@@ -12,6 +14,7 @@ import { ConfirmService } from '../../services/confirm';
   styleUrl: './client-list.css',
 })
 export class ClientList implements OnInit {
+  private router = inject(Router);
   private clientService = inject(ClientService);
   private notifier = inject(NotificationService);
   private confirmService = inject(ConfirmService);
@@ -41,6 +44,19 @@ export class ClientList implements OnInit {
   });
 
   pages = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
+
+  constructor() {
+    // Recharge la liste quand une popup se ferme (retour sur /clients).
+    this.router.events
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        skip(1),
+        takeUntilDestroyed()
+      )
+      .subscribe(e => {
+        if (e.urlAfterRedirects === '/clients') this.load();
+      });
+  }
 
   ngOnInit(): void {
     this.load();
