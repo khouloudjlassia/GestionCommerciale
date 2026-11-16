@@ -33,6 +33,13 @@ public class ProductService : IProductService
 
         await _repository.AddAsync(product);
         await _repository.SaveChangesAsync();
+
+        if (product.TaxId.HasValue)
+        {
+            var created = await _repository.GetByIdAsync(product.Id);
+            if (created != null) return ToDto(created);
+        }
+
         return ToDto(product);
     }
 
@@ -45,7 +52,9 @@ public class ProductService : IProductService
 
         ApplyDto(product, dto);
         await _repository.SaveChangesAsync();
-        return ToDto(product);
+
+        var updated = await _repository.GetByIdAsync(id);
+        return ToDto(updated ?? product);
     }
 
     public async Task DeleteAsync(int id)
@@ -71,7 +80,7 @@ public class ProductService : IProductService
         product.UnitPriceHT = dto.UnitPriceHT;
         product.StockQuantity = dto.StockQuantity;
         product.ImageUrl = dto.ImageUrl?.Trim();
-        product.TaxId = dto.TaxId;
+        product.TaxId = (dto.TaxId.HasValue && dto.TaxId.Value > 0) ? dto.TaxId.Value : null;
     }
 
     private static ProductDto ToDto(Product p) => new()

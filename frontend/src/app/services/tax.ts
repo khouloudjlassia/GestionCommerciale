@@ -7,3 +7,4 @@ import { TaxModel } from '../models/models';
 export class TaxService extends CrudService<TaxModel, Partial<TaxModel>> {
   protected resource = 'taxes';
 }
+

@@ -8,3 +8,4 @@ public class TaxDto
     public decimal Valeur { get; set; }
     public bool IsActive { get; set; }
 }
+
