@@ -14,13 +14,13 @@ public class ProductRepository : IProductRepository
     }
 
     public Task<List<Product>> GetAllAsync() =>
-        _context.Products.AsNoTracking().OrderBy(p => p.Name).ToListAsync();
+        _context.Products.Include(p => p.Tax).AsNoTracking().OrderBy(p => p.Name).ToListAsync();
 
     public Task<Product?> GetByIdAsync(int id) =>
-        _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        _context.Products.Include(p => p.Tax).FirstOrDefaultAsync(p => p.Id == id);
 
     public Task<List<Product>> GetByIdsAsync(IEnumerable<int> ids) =>
-        _context.Products.Where(p => ids.Contains(p.Id)).ToListAsync();
+        _context.Products.Include(p => p.Tax).Where(p => ids.Contains(p.Id)).ToListAsync();
 
     public Task<bool> ReferenceExistsAsync(string reference, int? excludeId = null) =>
         _context.Products.AnyAsync(p => p.Reference == reference && p.Id != excludeId);
@@ -30,7 +30,7 @@ public class ProductRepository : IProductRepository
 
     public async Task AddAsync(Product product) => await _context.Products.AddAsync(product);
 
-    public void Remove(Product product) => _context.Products.Remove(product);
+    public void Remove(Product product) => _context.Remove(product);
 
     public Task SaveChangesAsync() => _context.SaveChangesAsync();
 }

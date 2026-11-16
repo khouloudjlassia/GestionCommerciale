@@ -20,6 +20,15 @@ export interface ClientPayload {
   address: string | null;
 }
 
+/* ========== TAXES ========== */
+export interface TaxModel {
+  id: number;
+  libelle: string;
+  type: string;
+  valeur: number;
+  isActive: boolean;
+}
+
 /* ========== PRODUITS ========== */
 
 // Données reçues de l'API (ProductDto)
@@ -31,6 +40,9 @@ export interface ProductModel {
   unitPriceHT: number;
   stockQuantity: number;
   imageUrl: string | null;
+  taxId: number | null;
+  taxLibelle?: string;
+  taxValeur?: number;
   createdAt: string;
 }
 
@@ -42,6 +54,7 @@ export interface ProductPayload {
   unitPriceHT: number;
   stockQuantity: number;
   imageUrl: string | null;
+  taxId: number | null;
 }
 
 /* ========== COMMANDES ========== */
@@ -56,6 +69,8 @@ export interface OrderLineModel {
   quantity: number;
   unitPrice: number;
   lineTotal: number;
+  taxLibelle?: string;
+  taxValeur?: number;
 }
 
 // Commande reçue de l'API (OrderDto)
@@ -67,6 +82,7 @@ export interface OrderModel {
   orderDate: string;
   status: OrderStatus;
   totalHT: number;
+  discountAmount?: number;
   totalTTC: number;
   lines: OrderLineModel[];
 }

@@ -10,6 +10,7 @@ public class Order
     public OrderStatus Status { get; set; } = OrderStatus.Draft;
     public decimal TotalHT { get; set; }
     public decimal TotalTTC { get; set; }
+    public decimal DiscountAmount { get; set; }
 
     public ICollection<OrderLine> Lines { get; set; } = new List<OrderLine>();
 }

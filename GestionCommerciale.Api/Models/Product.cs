@@ -10,6 +10,8 @@ public class Product
     public int StockQuantity { get; set; }
     public string? ImageUrl { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
+ // 🔗 Association propre avec la Taxe :
+    public int? TaxId { get; set; }
+    public Tax? Tax { get; set; }     
     public ICollection<OrderLine> OrderLines { get; set; } = new List<OrderLine>();
 }

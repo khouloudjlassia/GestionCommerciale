@@ -38,9 +38,15 @@ export class OrderForm implements OnInit {
   saving = signal(false);
   submitted = signal(false);
 
+  lineTax(line: LineDraft): number {
+    const p = this.productOf(line);
+    if (!p || !p.taxValeur || p.taxValeur <= 0) return 0;
+    return this.lineTotal(line) * (p.taxValeur / 100);
+  }
+
   // Totaux recalculés automatiquement
   totalHT = computed(() => this.lines().reduce((sum, l) => sum + this.lineTotal(l), 0));
-  vat = computed(() => this.totalHT() * VAT_RATE);
+  vat = computed(() => this.lines().reduce((sum, l) => sum + this.lineTax(l), 0));
   totalTTC = computed(() => this.totalHT() + this.vat());
 
   problems = computed(() => {

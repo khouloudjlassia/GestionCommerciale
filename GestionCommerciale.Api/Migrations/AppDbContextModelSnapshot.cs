@@ -75,6 +75,9 @@ namespace GestionCommerciale.Api.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -111,6 +114,9 @@ namespace GestionCommerciale.Api.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("LineTotal")
                         .HasPrecision(18, 2)
@@ -172,6 +178,9 @@ namespace GestionCommerciale.Api.Migrations
                     b.Property<int>("StockQuantity")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TaxId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("UnitPriceHT")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
@@ -181,7 +190,71 @@ namespace GestionCommerciale.Api.Migrations
                     b.HasIndex("Reference")
                         .IsUnique();
 
+                    b.HasIndex("TaxId");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("GestionCommerciale.Api.Models.Tax", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Libelle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Valeur")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Taxes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsActive = true,
+                            Libelle = "TVA Standard 19%",
+                            Type = 0,
+                            Valeur = 19m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsActive = true,
+                            Libelle = "TVA Réduite 7%",
+                            Type = 0,
+                            Valeur = 7m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsActive = true,
+                            Libelle = "Exonéré (0%)",
+                            Type = 0,
+                            Valeur = 0m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsActive = true,
+                            Libelle = "Timbre Fiscal",
+                            Type = 1,
+                            Valeur = 1m
+                        });
                 });
 
             modelBuilder.Entity("GestionCommerciale.Api.Models.Order", b =>
@@ -214,6 +287,16 @@ namespace GestionCommerciale.Api.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("GestionCommerciale.Api.Models.Product", b =>
+                {
+                    b.HasOne("GestionCommerciale.Api.Models.Tax", "Tax")
+                        .WithMany("Products")
+                        .HasForeignKey("TaxId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Tax");
+                });
+
             modelBuilder.Entity("GestionCommerciale.Api.Models.Client", b =>
                 {
                     b.Navigation("Orders");
@@ -227,6 +310,11 @@ namespace GestionCommerciale.Api.Migrations
             modelBuilder.Entity("GestionCommerciale.Api.Models.Product", b =>
                 {
                     b.Navigation("OrderLines");
+                });
+
+            modelBuilder.Entity("GestionCommerciale.Api.Models.Tax", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

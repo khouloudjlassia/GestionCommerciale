@@ -9,5 +9,8 @@ public class ProductDto
     public decimal UnitPriceHT { get; set; }
     public int StockQuantity { get; set; }
     public string? ImageUrl { get; set; }
+    public int? TaxId { get; set; }
+    public string? TaxLibelle { get; set; }
+    public decimal? TaxValeur { get; set; }
     public DateTime CreatedAt { get; set; }
 }

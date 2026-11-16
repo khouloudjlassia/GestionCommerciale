@@ -11,7 +11,7 @@ public class AppDbContext : DbContext
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Order> Orders => Set<Order>();
     public DbSet<OrderLine> OrderLines => Set<OrderLine>();
-
+public DbSet<Tax> Taxes => Set<Tax>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Client>(e =>
@@ -66,5 +66,26 @@ public class AppDbContext : DbContext
 
             e.ToTable(t => t.HasCheckConstraint("CK_OrderLines_Quantity", "[Quantity] > 0"));
         });
+        modelBuilder.Entity<Tax>(e =>
+{
+    e.Property(t => t.Libelle).IsRequired().HasMaxLength(100);
+    e.Property(t => t.Valeur).HasPrecision(18, 2);
+
+    // Données par défaut pour les tests
+    e.HasData(
+        new Tax { Id = 1, Libelle = "TVA Standard 19%", Type = TaxType.Percentage, Valeur = 19m, IsActive = true },
+        new Tax { Id = 2, Libelle = "TVA Réduite 7%",   Type = TaxType.Percentage, Valeur = 7m,  IsActive = true },
+        new Tax { Id = 3, Libelle = "Exonéré (0%)",      Type = TaxType.Percentage, Valeur = 0m,  IsActive = true },
+        new Tax { Id = 4, Libelle = "Timbre Fiscal",     Type = TaxType.FixedAmount, Valeur = 1m, IsActive = true }
+    );
+});
+
+modelBuilder.Entity<Product>(e =>
+{
+    e.HasOne(p => p.Tax)
+     .WithMany(t => t.Products)
+     .HasForeignKey(p => p.TaxId)
+     .OnDelete(DeleteBehavior.SetNull);
+});
     }
 }

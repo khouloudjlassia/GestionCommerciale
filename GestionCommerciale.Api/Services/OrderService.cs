@@ -155,8 +155,8 @@ public class OrderService : IOrderService
             {
                 Product = product,
                 Quantity = quantity,
-                UnitPrice = product.UnitPriceHT,            // prix lu en base, jamais envoyé par le client
-                LineTotal = quantity * product.UnitPriceHT
+                UnitPrice = product.UnitPriceHT,            //  Le prix unitaire HT prix lu en base, jamais envoyé par le client
+                LineTotal = quantity * product.UnitPriceHT  //  product.UnitPriceHT	Le total de la ligne : Quantité × Prix unitaire
             });
         }
     }
@@ -164,7 +164,26 @@ public class OrderService : IOrderService
     private static void RecalculateTotals(Order order)
     {
         order.TotalHT = order.Lines.Sum(l => l.LineTotal);
-        order.TotalTTC = Math.Round(order.TotalHT * (1 + BusinessConstants.VatRate), 2);
+
+        decimal totalTaxes = 0m;
+        foreach (var line in order.Lines)
+        {
+            var tax = line.Product?.Tax;
+            if (tax != null && tax.IsActive && tax.Valeur > 0)
+            {
+                if (tax.Type == TaxType.Percentage)
+                {
+                    totalTaxes += line.LineTotal * (tax.Valeur / 100m);
+                }
+                else if (tax.Type == TaxType.FixedAmount)
+                {
+                    totalTaxes += tax.Valeur * line.Quantity;
+                }
+            }
+        }
+
+        decimal baseApresRemise = Math.Max(0, order.TotalHT - order.DiscountAmount);
+        order.TotalTTC = Math.Round(baseApresRemise + totalTaxes, 2);
     }
 
     private async Task<string> GenerateOrderNumberAsync()
@@ -196,6 +215,7 @@ public class OrderService : IOrderService
         Status = o.Status.ToString(),
         TotalHT = o.TotalHT,
         TotalTTC = o.TotalTTC,
+        DiscountAmount = o.DiscountAmount,
         Lines = o.Lines.Select(l => new OrderLineDto
         {
             ProductId = l.ProductId,
@@ -203,7 +223,9 @@ public class OrderService : IOrderService
             ProductName = l.Product.Name,
             Quantity = l.Quantity,
             UnitPrice = l.UnitPrice,
-            LineTotal = l.LineTotal
+            LineTotal = l.LineTotal,
+            TaxLibelle = l.Product.Tax?.Libelle,
+            TaxValeur = l.Product.Tax?.Valeur ?? 0m,
         }).ToList()
     };
 }

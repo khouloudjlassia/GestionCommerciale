@@ -8,6 +8,8 @@ public class OrderLineDto
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal LineTotal { get; set; }
+    public string? TaxLibelle { get; set; }
+    public decimal TaxValeur { get; set; }
 }
 
 public class OrderDto
@@ -19,6 +21,7 @@ public class OrderDto
     public DateTime OrderDate { get; set; }
     public string Status { get; set; } = string.Empty;
     public decimal TotalHT { get; set; }
+    public decimal DiscountAmount { get; set; }
     public decimal TotalTTC { get; set; }
     public List<OrderLineDto> Lines { get; set; } = new();
 }

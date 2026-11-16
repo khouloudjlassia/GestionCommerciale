@@ -71,6 +71,7 @@ public class ProductService : IProductService
         product.UnitPriceHT = dto.UnitPriceHT;
         product.StockQuantity = dto.StockQuantity;
         product.ImageUrl = dto.ImageUrl?.Trim();
+        product.TaxId = dto.TaxId;
     }
 
     private static ProductDto ToDto(Product p) => new()
@@ -82,6 +83,9 @@ public class ProductService : IProductService
         UnitPriceHT = p.UnitPriceHT,
         StockQuantity = p.StockQuantity,
         ImageUrl = p.ImageUrl,
+        TaxId = p.TaxId,
+        TaxLibelle = p.Tax?.Libelle,
+        TaxValeur = p.Tax?.Valeur,
         CreatedAt = p.CreatedAt
     };
 }

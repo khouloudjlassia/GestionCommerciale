@@ -13,11 +13,11 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
 
-    // Requête de base : commande + client + lignes + produits
+    // Requête de base : commande + client + lignes + produits + taxe du produit
     private IQueryable<Order> OrdersWithDetails() =>
         _context.Orders
             .Include(o => o.Client)
-            .Include(o => o.Lines).ThenInclude(l => l.Product);
+            .Include(o => o.Lines).ThenInclude(l => l.Product).ThenInclude(p => p.Tax);
 
     public Task<List<Order>> GetAllAsync() =>
         OrdersWithDetails().AsNoTracking().OrderByDescending(o => o.OrderDate).ToListAsync();
